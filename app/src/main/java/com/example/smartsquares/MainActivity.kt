@@ -1,11 +1,29 @@
 package com.example.smartsquares
 
-import android.support.v7.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.v7.app.AppCompatActivity
+import android.util.TypedValue
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TableLayout
 import android.widget.TextView
-import org.w3c.dom.Text
+
+import android.app.ActionBar
+import android.util.Log
+import kotlinx.android.synthetic.main.activity_main.*
+import android.view.ViewGroup
+import android.widget.TableRow
+import kotlinx.android.synthetic.main.activity_main.view.*
+
 
 class MainActivity : AppCompatActivity() {
+
+    val ROWS = 10
+    val COLUMNS = 5
+    val tableLayout by lazy { TableLayout(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,28 +33,69 @@ class MainActivity : AppCompatActivity() {
         val score_dinamic: TextView = findViewById(R.id.score_dinamic) // score dinamic
         val heart_dinamic: TextView = findViewById(R.id.heart_dinamic) // heart dinamic
         val heart_static: TextView = findViewById(R.id.heart_static) // heart static
-
+        // val constraintLayout: ConstraintLayout = findViewById(R.id.constraintLayout) // De modificat
 
         val game = game_squares()
 
         game.heart_down()
         game.heart_down()
-        game.heart_down()
 
+        // Game Over
+        if (game.heart == 0){
+            heart_static.text = "Game Over"
+            heart_static.setTextColor(Color.parseColor("#eb4034"));
+            heart_static.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50F)
+            heart_static.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
+            heart_dinamic.visibility = View.INVISIBLE
+
+            // constraintLayout.visibility = View.INVISIBLE // Set Layout with squares INVISIBLE
+        }
         game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
 
+        textView.text = "ROWS : $ROWS COLUMNS: $COLUMNS"
+
+
+        val lp = TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        tableLayout.apply {
+            layoutParams = lp
+            isShrinkAllColumns = true
+        }
+
+
+        createTable(ROWS, COLUMNS)
+
     }
 
-    public fun game_over(){
+    fun createTable(rows: Int, cols: Int) {
 
-        heart_static.text = "Game ".toString()
-        heart_dinamic.text = "Over!".toString()
+        for (i in 0 until rows) {
 
+            val row = TableRow(this)
+            row.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT)
+
+            for (j in 0 until cols) {
+
+                val button = Button(this)
+                button.apply {
+                    layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                        TableRow.LayoutParams.WRAP_CONTENT)
+                    text = "R $i C $j"
+                }
+                row.addView(button)
+            }
+            tableLayout.addView(row)
+        }
+        linearLayout.addView(tableLayout)
     }
+
+}
+
+
 
     class game_squares{
-        var level: Int = 0       // Init level with default: 0;
-        var score: Int = 0      // Init score with default: 0;
+        var level: Int = 50000       // Init level with default: 0;
+        var score: Int = 50000    // Init score with default: 0;
         var heart: Int = 3     // Init heart with default: 3;
 
         fun level_up() : Int {    // level-ul function;
@@ -52,7 +111,6 @@ class MainActivity : AppCompatActivity() {
             heart-- // heart-down -1
 
             if (heart == 0){
-                game_over()
                 return 0
             }
             return heart
