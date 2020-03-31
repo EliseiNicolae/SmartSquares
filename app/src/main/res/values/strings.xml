@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SmartSquares</string>
+    <string name="level_static">Level:</string>
+    <string name="level_dinamic">2</string>
+    <string name="score_static">Score: </string>
+    <string name="score_dinamic">0</string>
+    <string name="heart_static">"Heart: "</string>
+    <string name="heart_dinamic">0</string>
 </resources>
