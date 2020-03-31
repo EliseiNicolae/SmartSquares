@@ -6,23 +6,16 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TableLayout
-import android.widget.TextView
-
-import android.app.ActionBar
-import android.util.Log
-import kotlinx.android.synthetic.main.activity_main.*
 import android.view.ViewGroup
-import android.widget.TableRow
-import kotlinx.android.synthetic.main.activity_main.view.*
+import android.widget.*
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 
 class MainActivity : AppCompatActivity() {
 
-    val ROWS = 10
-    val COLUMNS = 5
+    val ROWS = 3
+    val COLUMNS = 3
     val tableLayout by lazy { TableLayout(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         game.heart_down()
 
         // Game Over
-        if (game.heart == 0){
+        if (game.heart == 0) {
             heart_static.text = "Game Over"
             heart_static.setTextColor(Color.parseColor("#eb4034"));
             heart_static.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50F)
@@ -50,9 +43,8 @@ class MainActivity : AppCompatActivity() {
 
             // constraintLayout.visibility = View.INVISIBLE // Set Layout with squares INVISIBLE
         }
-        game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
 
-        textView.text = "ROWS : $ROWS COLUMNS: $COLUMNS"
+        game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
 
 
         val lp = TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -63,7 +55,6 @@ class MainActivity : AppCompatActivity() {
 
 
         createTable(ROWS, COLUMNS)
-
     }
 
     fun createTable(rows: Int, cols: Int) {
@@ -71,13 +62,15 @@ class MainActivity : AppCompatActivity() {
         for (i in 0 until rows) {
 
             val row = TableRow(this)
-            row.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            row.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT)
 
             for (j in 0 until cols) {
 
                 val button = Button(this)
                 button.apply {
+                    //TODO: Adauga id la fiecare buton, si verifica daca poti sa iei butonul si sa ii schimbi background-ul.
                     layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                         TableRow.LayoutParams.WRAP_CONTENT)
                     text = "R $i C $j"
@@ -123,4 +116,3 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-}
