@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.reflect.Array
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,11 +61,12 @@ class MainActivity : AppCompatActivity() {
         parcurgere_matrice(ROWS, COLUMNS)
     }
 
+    val list: ArrayList<Button> = ArrayList() // initializare lista
+
     fun createTable(rows: Int, cols: Int) {
         contor_id = 0
 
         for (i in 0 until rows) {
-
             val row = TableRow(this)
             row.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -79,18 +81,7 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.WRAP_CONTENT)
                     text = "R $i C $j"
                 }
-                var q=0
-                val asc = Array(rows*cols) {q -> q.toString() } // initializeaza variabila inafara for urilor, si aici doar adaugi elemente, p.s ii poti da return la array
-                q=q+1 // Sau sa il faci static.
-                asc.forEach { println(q) }
-
-                //cel bun, verific de ce apare de 2 ori
-                /*val asc = Array(rows*cols) { button ->  button.toString() }
-                asc.forEach {
-                    if(button.id == 2) {
-                        println(button.text)
-                    }
-                }*/
+                list.add(button) // adaugare button in lista
 
                 row.addView(button)
                 contor_id++
@@ -98,6 +89,15 @@ class MainActivity : AppCompatActivity() {
             tableLayout.addView(row)
         }
         linearLayout.addView(tableLayout)
+
+        //printf list
+        for (element in list){
+            if(element.id == 2){
+                element.apply { setTextColor(Color.BLACK) }
+            }
+            //println(element.text)
+        }
+
     }
 
     fun parcurgere_matrice(rows: Int, cols: Int){
