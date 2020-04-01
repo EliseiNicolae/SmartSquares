@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
-
+import java.lang.reflect.Array
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     val ROWS = 3
     val COLUMNS = 3
     val tableLayout by lazy { TableLayout(this) }
+    public var contor_id = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +56,12 @@ class MainActivity : AppCompatActivity() {
 
 
         createTable(ROWS, COLUMNS)
+
+        parcurgere_matrice(ROWS, COLUMNS)
     }
 
     fun createTable(rows: Int, cols: Int) {
+        contor_id = 0
 
         for (i in 0 until rows) {
 
@@ -67,22 +71,40 @@ class MainActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT)
 
             for (j in 0 until cols) {
-
                 val button = Button(this)
                 button.apply {
-                    //TODO: Adauga id la fiecare buton, si verifica daca poti sa iei butonul si sa ii schimbi background-ul.
+                    id=contor_id
+                    setTextColor(Color.WHITE)
                     layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                         TableRow.LayoutParams.WRAP_CONTENT)
                     text = "R $i C $j"
                 }
+                var q=0
+                val asc = Array(rows*cols) {q -> q.toString() } // initializeaza variabila inafara for urilor, si aici doar adaugi elemente, p.s ii poti da return la array
+                q=q+1 // Sau sa il faci static.
+                asc.forEach { println(q) }
+
+                //cel bun, verific de ce apare de 2 ori
+                /*val asc = Array(rows*cols) { button ->  button.toString() }
+                asc.forEach {
+                    if(button.id == 2) {
+                        println(button.text)
+                    }
+                }*/
+
                 row.addView(button)
+                contor_id++
             }
             tableLayout.addView(row)
         }
         linearLayout.addView(tableLayout)
     }
 
+    fun parcurgere_matrice(rows: Int, cols: Int){
+
+    }
 }
+
 
 
 
