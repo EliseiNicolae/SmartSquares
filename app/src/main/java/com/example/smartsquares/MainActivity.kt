@@ -9,8 +9,8 @@ import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.ArrayList
 class MainActivity : AppCompatActivity() {
-    var ROWS = 3
-    var COLUMNS = 3
+    var ROWS = 2
+    var COLUMNS = 2
 
     var contor_id = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             ViewGroup.LayoutParams.MATCH_PARENT
         )
         tableLayout.setLayoutParams(lp)
-        tableLayout.apply { isShrinkAllColumns }
+        tableLayout.apply { isShrinkAllColumns = true }
 
         contor_id = 0
         for (i in 0 until rows) {
