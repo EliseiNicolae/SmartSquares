@@ -9,9 +9,10 @@ import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.ArrayList
 class MainActivity : AppCompatActivity() {
-    val ROWS = 2
-    val COLUMNS = 2
-    val tableLayout by lazy { TableLayout(this) }
+    var ROWS = 4
+    var COLUMNS = 4
+    lateinit var tableLayout: TableLayout;
+
     var contor_id = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,27 +35,19 @@ class MainActivity : AppCompatActivity() {
             linearLayout_squares.visibility = View.VISIBLE
             play_again.visibility = View.GONE
             game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
-            val lp = TableLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            tableLayout.apply {
-                layoutParams = lp
-                isShrinkAllColumns = true
-            }
             //TODO: Cand faci un joc nou trebuie sa stergi view-urile create existent. linie 96 (linearLayout_squares.addView(tableLayout)
             createTable(ROWS + game.level, COLUMNS + game.level)
         }
 
-        var prima_runda = true
+        new_game()
+
         Thread(Runnable { // work in loop
-            if(prima_runda == true){
-                prima_runda = false
-                new_game()
-            }
             // Game Over
             if (game.heart == 0 || game.level >= 7) {
                 game_over()   // Set background for game_over
+//                Delete_old_Table(ROWS + game.level, COLUMNS + game.level)
+                ROWS = 2
+                COLUMNS = 2
                 play_again.setOnClickListener { new_game() } // When player press "Play again"
             }
         }).start()
@@ -70,10 +63,27 @@ class MainActivity : AppCompatActivity() {
         heart_dinamic.visibility = View.INVISIBLE
         linearLayout_squares.visibility = View.INVISIBLE
         play_again.visibility = View.VISIBLE
+
     }
 
-    val list: ArrayList<Button> = ArrayList() // initializare lista
+    var list: ArrayList<Button> = ArrayList() // initializare lista
+
+
     fun createTable(rows: Int, cols: Int) {
+        println("Numarul de rows: $rows")
+        println("Numarul de cols: $cols")
+        if (tableLayout != null) {
+            linearLayout_squares.removeView(tableLayout);
+        }
+        tableLayout = TableLayout(this);
+        val lp = TableLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        tableLayout.setLayoutParams(lp)
+        tableLayout.apply { isShrinkAllColumns }
+//        tableLayout.setIsShrinkAllColumns(true);
+
         contor_id = 0
         for (i in 0 until rows) {
             val row = TableRow(this)
@@ -97,14 +107,15 @@ class MainActivity : AppCompatActivity() {
             tableLayout.addView(row)
         }
         linearLayout_squares.addView(tableLayout) //TODO: here
+
         //printf list
         for (element in list){
-            if(element.id == 2){
+            /*if(element.id == 2){
                 element.apply {
                     setTextColor(Color.BLACK)
                 }
-            }
-            //println(element.text)
+            }*/
+            println(element.text)
         }
     }
 }
