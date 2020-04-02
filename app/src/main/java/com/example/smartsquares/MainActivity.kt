@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         game.heart_down()
         game.heart_down()
         game.heart_down()
+
         fun new_game(){ // Set default
             heart_static.text = "Heart: "
             heart_static.setTextColor(Color.parseColor("#4d5457"));
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             heart_static.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
             heart_dinamic.visibility = View.VISIBLE
             linearLayout_squares.visibility = View.VISIBLE
-            play_again.visibility = View.INVISIBLE
+            play_again.visibility = View.GONE
             game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
             val lp = TableLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             //TODO: Cand faci un joc nou trebuie sa stergi view-urile create existent. linie 96 (linearLayout_squares.addView(tableLayout)
             createTable(ROWS + game.level, COLUMNS + game.level)
         }
+
         var prima_runda = true
         Thread(Runnable { // work in loop
             if(prima_runda == true){
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                 play_again.setOnClickListener { new_game() } // When player press "Play again"
             }
         }).start()
+
     }
     /* fun create_random_red_squares(rows: Int, cols: Int){
      }*/
@@ -90,10 +93,10 @@ class MainActivity : AppCompatActivity() {
                 row.addView(button)
                 contor_id++
             }
+
             tableLayout.addView(row)
         }
-
-        linearLayout_squares.addView(tableLayout)
+        linearLayout_squares.addView(tableLayout) //TODO: here
         //printf list
         for (element in list){
             if(element.id == 2){
