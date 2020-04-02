@@ -9,9 +9,8 @@ import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.ArrayList
 class MainActivity : AppCompatActivity() {
-    var ROWS = 4
-    var COLUMNS = 4
-    lateinit var tableLayout: TableLayout;
+    var ROWS = 3
+    var COLUMNS = 3
 
     var contor_id = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +20,10 @@ class MainActivity : AppCompatActivity() {
         val level_dinamic: TextView = findViewById(R.id.level_dinamic) // level_dinamic
         val score_dinamic: TextView = findViewById(R.id.score_dinamic) // score dinamic
         val heart_dinamic: TextView = findViewById(R.id.heart_dinamic) // heart dinamic
+
+
+        //TODO: Trebuie sa pui ce e dupa global.
+        //TODO: Vezi ca ai o eraore (intra in out-views) cand sunt mai multe de 4 coloane / rows.
         val game = game_squares() // class game_squares()
         game.heart_down()
         game.heart_down()
@@ -35,22 +38,9 @@ class MainActivity : AppCompatActivity() {
             linearLayout_squares.visibility = View.VISIBLE
             play_again.visibility = View.GONE
             game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
-            //TODO: Cand faci un joc nou trebuie sa stergi view-urile create existent. linie 96 (linearLayout_squares.addView(tableLayout)
             createTable(ROWS + game.level, COLUMNS + game.level)
         }
-
         new_game()
-
-        Thread(Runnable { // work in loop
-            // Game Over
-            if (game.heart == 0 || game.level >= 7) {
-                game_over()   // Set background for game_over
-//                Delete_old_Table(ROWS + game.level, COLUMNS + game.level)
-                ROWS = 2
-                COLUMNS = 2
-                play_again.setOnClickListener { new_game() } // When player press "Play again"
-            }
-        }).start()
 
     }
     /* fun create_random_red_squares(rows: Int, cols: Int){
@@ -72,17 +62,14 @@ class MainActivity : AppCompatActivity() {
     fun createTable(rows: Int, cols: Int) {
         println("Numarul de rows: $rows")
         println("Numarul de cols: $cols")
-        if (tableLayout != null) {
-            linearLayout_squares.removeView(tableLayout);
-        }
-        tableLayout = TableLayout(this);
+        linearLayout_squares.removeAllViews()
+        val tableLayout = TableLayout(this);
         val lp = TableLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
         tableLayout.setLayoutParams(lp)
         tableLayout.apply { isShrinkAllColumns }
-//        tableLayout.setIsShrinkAllColumns(true);
 
         contor_id = 0
         for (i in 0 until rows) {
@@ -99,6 +86,7 @@ class MainActivity : AppCompatActivity() {
                         TableRow.LayoutParams.WRAP_CONTENT)
                     text = contor_id.toString()
                 }
+                button.setOnClickListener { buttonClicked(button) }
                 list.add(button) // adaugare button in lista
                 row.addView(button)
                 contor_id++
@@ -117,6 +105,19 @@ class MainActivity : AppCompatActivity() {
             }*/
             println(element.text)
         }
+    }
+
+    private fun buttonClicked(button: Button) {
+        /*if (game.heart == 0 || game.level >= 7) {
+            game_over()   // Set background for game_over
+//                Delete_old_Table(ROWS + game.level, COLUMNS + game.level)
+            ROWS = 2
+            COLUMNS = 2
+            play_again.setOnClickListener { new_game() } // When player press "Play again"
+        }
+        println("button ${button.id}")*/
+        println("button ${button.id}")
+
     }
 }
 class game_squares{
