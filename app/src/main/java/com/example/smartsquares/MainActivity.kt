@@ -1,13 +1,21 @@
 package com.example.smartsquares
+
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.print.PrintAttributes
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.ArrayList
+import java.util.*
+
+
 class MainActivity : AppCompatActivity() {
     var ROWS = 2
     var COLUMNS = 2
@@ -20,31 +28,53 @@ class MainActivity : AppCompatActivity() {
         val level_dinamic: TextView = findViewById(R.id.level_dinamic) // level_dinamic
         val score_dinamic: TextView = findViewById(R.id.score_dinamic) // score dinamic
         val heart_dinamic: TextView = findViewById(R.id.heart_dinamic) // heart dinamic
-
-
-        //TODO: Trebuie sa pui ce e dupa global.
-        //TODO: Vezi ca ai o eraore (intra in out-views) cand sunt mai multe de 4 coloane / rows.
-        val game = game_squares() // class game_squares()
-        game.heart_down()
-        game.heart_down()
-        game.heart_down()
-
-        fun new_game(){ // Set default
-            heart_static.text = "Heart: "
-            heart_static.setTextColor(Color.parseColor("#4d5457"));
-            heart_static.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25F)
-            heart_static.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
-            heart_dinamic.visibility = View.VISIBLE
-            linearLayout_squares.visibility = View.VISIBLE
-            play_again.visibility = View.GONE
-            game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
-            createTable(ROWS + game.level, COLUMNS + game.level)
-        }
         new_game()
-
     }
-    /* fun create_random_red_squares(rows: Int, cols: Int){
-     }*/
+    var list: ArrayList<Button> = ArrayList() // initializare lista
+
+    // get random numbers for red squares
+    fun get_random_numbers(): List<Int> {
+        val total_number_per_table = (ROWS + game.level) * (ROWS + game.level) - 1 // -1 becuase i = 0
+        val randomList = (0..total_number_per_table).shuffled().take(game.stage * game.level)
+        return randomList
+    }
+
+    //create & show red squares
+    fun create_red_squares(){
+        for (i in get_random_numbers()){
+            for (button in list){
+                if (button.id == i){
+                    button.apply {
+                        text = "|||||||||||||"
+                        setTextColor(Color.RED)
+                    }
+
+                    Handler().postDelayed({
+                        button.apply {
+                            setTextColor(Color.TRANSPARENT)
+                        }
+                    }, 4000)
+                }
+            }
+            println(i)
+        }
+    }
+
+    val game = game_squares() // class game_squares()
+
+    fun new_game(){ // Set default
+        heart_static.text = "Heart: "
+        heart_static.setTextColor(Color.parseColor("#4d5457"));
+        heart_static.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25F)
+        heart_static.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
+        heart_dinamic.visibility = View.VISIBLE
+        linearLayout_squares.visibility = View.VISIBLE
+        play_again.visibility = View.GONE
+        game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
+        createTable(ROWS + game.level, COLUMNS + game.level)
+        create_red_squares()
+    }
+
     fun game_over(){
         heart_static.text = "Game Over"
         heart_static.setTextColor(Color.parseColor("#eb4034"));
@@ -56,12 +86,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    var list: ArrayList<Button> = ArrayList() // initializare lista
 
 
     fun createTable(rows: Int, cols: Int) {
-        println("Numarul de rows: $rows")
-        println("Numarul de cols: $cols")
         linearLayout_squares.removeAllViews()
         val tableLayout = TableLayout(this);
         val lp = TableLayout.LayoutParams(
@@ -81,12 +108,12 @@ class MainActivity : AppCompatActivity() {
                 val button = Button(this)
                 button.apply {
                     id=contor_id
-                    setTextColor(Color.WHITE)
                     layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                         TableRow.LayoutParams.WRAP_CONTENT)
-                    text = contor_id.toString()
+                    //text = contor_id.toString()
+
                 }
-                button.setOnClickListener { buttonClicked(button) }
+                button.setOnClickListener { buttonClicked(button) } // when i click button
                 list.add(button) // adaugare button in lista
                 row.addView(button)
                 contor_id++
@@ -94,36 +121,44 @@ class MainActivity : AppCompatActivity() {
 
             tableLayout.addView(row)
         }
-        linearLayout_squares.addView(tableLayout) //TODO: here
+        linearLayout_squares.addView(tableLayout)
 
         //printf list
-        for (element in list){
-            /*if(element.id == 2){
-                element.apply {
-                    setTextColor(Color.BLACK)
-                }
-            }*/
+        /*for (element in list){
             println(element.text)
-        }
+        }*/
     }
 
     private fun buttonClicked(button: Button) {
-        /*if (game.heart == 0 || game.level >= 7) {
+        // Verific daca mai are vieti sau a terminat jocul.
+        if (game.heart == 0 || game.level + ROWS > 9) { // level 8 este maxim (8 + 2(rows) = 10;
             game_over()   // Set background for game_over
-//                Delete_old_Table(ROWS + game.level, COLUMNS + game.level)
             ROWS = 2
             COLUMNS = 2
             play_again.setOnClickListener { new_game() } // When player press "Play again"
         }
-        println("button ${button.id}")*/
-        println("button ${button.id}")
 
+        /*game.heart_down()
+        game.heart_down() // Merge
+        game.heart_down()*/
+
+
+
+        createTable(ROWS + game.level, COLUMNS + game.level) // merge YEEY
+        game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
+
+        println("button ${button.id}")
     }
 }
+
+
+
 class game_squares{
-    var level: Int = 1       // Init level with default: 0;
+    var level: Int = 2     // Init level with default: 0;
     var score: Int = 0    // Init score with default: 0;
     var heart: Int = 3     // Init heart with default: 3;
+    var stage: Int = 4;  // Init stage defauld 2; it is how much random numbers i make;
+
     fun level_up() : Int {    // level-ul function;
         return level++
     }
