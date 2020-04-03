@@ -54,20 +54,24 @@ class MainActivity : AppCompatActivity() {
             lista_cu_red_buttons.add(i)
 
             for (button in lista_cu_butoane){
+                button.apply {
+                    isEnabled=false
+                }
                 if (button.id == i){
                     println(button.id)
                     button.apply {
-                        text = "|||||||||||||"
-                        setTextColor(Color.GREEN)
+                        text = "||||||||"
+                        setTextColor(Color.BLACK)
                     }
-//
-//                    Handler().postDelayed({
-//                        button.apply {
-//                            setTextColor(Color.TRANSPARENT)
-//                        }
-//                    }, 3000)
                 }
+                Handler().postDelayed({
+                    button.apply {
+                        setTextColor(Color.TRANSPARENT)
+                        isEnabled=true
+                    }
+                }, 1500)
             }
+
         }
     }
 
@@ -96,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         play_again.visibility = View.VISIBLE
         lista_cu_butoane.clear() // clear old elements from array
         lista_cu_red_buttons.clear() // clear old elements from array
+        lista_cu_butoane_valide_apasate.clear() // clear old elements from buttons pressed
     }
 
 
@@ -142,6 +147,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    var lista_cu_butoane_valide_apasate: ArrayList<Int> = ArrayList() // salvare butoane rosii in aceasta lista;
     private fun buttonClicked(button: Button) {
         //TODO: Bug la afisare, cred ca este de la createTable si afisarea sa
 
@@ -153,20 +159,35 @@ class MainActivity : AppCompatActivity() {
         for (i in  lista_cu_red_buttons){
             if(button.id == i){
                 a_fost_apasat_corect = true
-
             }
         }
         if (a_fost_apasat_corect){
             button.apply {
-                text = "|||||||||||||"
                 setTextColor(Color.GREEN)
+                isEnabled = false
+                game.score_up()
             }
+            lista_cu_butoane_valide_apasate.add(button.id)
         }else{
             button.apply {
-                text = "|||||||||||||"
+                text = "||||||||"
                 setTextColor(Color.RED)
+                isEnabled = false
             }
             game.heart_down()
+        }
+        println("Total elemente apasate: ")
+        println(lista_cu_butoane_valide_apasate)
+
+        println("Total elemente red buttons: ")
+        println(lista_cu_red_buttons)
+
+        if(lista_cu_butoane_valide_apasate.count() == lista_cu_red_buttons.count()){
+            lista_cu_butoane_valide_apasate.clear() // clear old elements from buttons pressed
+            lista_cu_butoane.clear() // clear old elements from array
+            lista_cu_red_buttons.clear() // clear old elements from array
+            game.level_up()
+            new_game()
         }
         game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
 
@@ -179,6 +200,7 @@ class MainActivity : AppCompatActivity() {
             COLUMNS = 2
             game.level = 1
             game.heart = 3
+            game.score = 0
             play_again.setOnClickListener { new_game() } // When player press "Play again"
         }
     }
