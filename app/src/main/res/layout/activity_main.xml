@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="#fffde3"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -29,12 +29,13 @@
 
             <TextView
                 android:id="@+id/level_static"
-                android:layout_width="305dp"
+                android:layout_width="308dp"
                 android:layout_height="wrap_content"
                 android:text="@string/level_static"
                 android:textAlignment="textEnd"
                 android:textColor="#4d5457"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/level_dinamic"
@@ -43,7 +44,8 @@
                 android:text="@string/level_dinamic"
                 android:textAlignment="textStart"
                 android:textColor="#4d5457"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
@@ -62,7 +64,8 @@
                 android:text="@string/score_static"
                 android:textAlignment="textEnd"
                 android:textColor="#4d5457"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/score_dinamic"
@@ -71,7 +74,8 @@
                 android:text="@string/score_dinamic"
                 android:textAlignment="textStart"
                 android:textColor="#4d5457"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -83,12 +87,13 @@
 
             <TextView
                 android:id="@+id/heart_static"
-                android:layout_width="311dp"
+                android:layout_width="308dp"
                 android:layout_height="match_parent"
                 android:text="@string/heart_static"
                 android:textAlignment="textEnd"
                 android:textColor="#4d5457"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/heart_dinamic"
@@ -97,7 +102,8 @@
                 android:text="@string/heart_dinamic"
                 android:textAlignment="textStart"
                 android:textColor="#4d5457"
-                android:textSize="25sp" />
+                android:textSize="25sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <Button
@@ -105,7 +111,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/button_middle" />
+            android:text="@string/button_middle"
+            android:textStyle="bold" />
 
 
     </LinearLayout>
