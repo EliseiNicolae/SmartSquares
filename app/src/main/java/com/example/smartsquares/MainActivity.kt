@@ -3,9 +3,10 @@ package com.example.smartsquares
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.print.PrintAttributes
+import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -13,7 +14,6 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     var ROWS = 2
     var COLUMNS = 2
 
-    lateinit var play_again: Button
+    lateinit var button_middle: Button
     lateinit var score_dinamic: TextView
     lateinit var heart_dinamic: TextView
     lateinit var level_dinamic: TextView
@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-         play_again = findViewById(R.id.play_again) // Play Again button;
-         level_dinamic = findViewById(R.id.level_dinamic) // level_dinamic;
-         score_dinamic = findViewById(R.id.score_dinamic) // score dinamic;
+        button_middle = findViewById(R.id.button_middle) // Play Again button;
+        level_dinamic = findViewById(R.id.level_dinamic) // level_dinamic;
+        score_dinamic = findViewById(R.id.score_dinamic) // score dinamic;
         heart_dinamic = findViewById(R.id.heart_dinamic) // heart dinamic;
         new_game()
     }
@@ -57,18 +57,27 @@ class MainActivity : AppCompatActivity() {
                 button.apply {
                     isEnabled=false
                 }
+                button_middle.isEnabled = false
                 if (button.id == i){
                     println(button.id)
                     button.apply {
-                        text = "||||||||"
+                        if (game.level > 5)
+                            text = "||||"
+                        else{
+                            text = "||||||||"
+                        }
                         setTextColor(Color.BLACK)
                     }
                 }
                 Handler().postDelayed({
+                    // disable all buttons
                     button.apply {
                         setTextColor(Color.TRANSPARENT)
                         isEnabled=true
                     }
+                    //if you have hints
+                    if(game.hints > 0)
+                        button_middle.isEnabled = true
                 }, 1500)
             }
 
@@ -84,20 +93,21 @@ class MainActivity : AppCompatActivity() {
         heart_static.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
         heart_dinamic.visibility = View.VISIBLE
         linearLayout_squares.visibility = View.VISIBLE
-        play_again.visibility = View.GONE
+        button_middle.text = "Hint(${game.hints})"
+        button_middle.isEnabled = true
         game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
         createTable(ROWS + game.level, COLUMNS + game.level)
         create_red_squares()
     }
 
     fun game_over(){
+        button_middle.text = "Play Again!"
         heart_static.text = "Game Over"
         heart_static.setTextColor(Color.parseColor("#eb4034"));
         heart_static.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50F)
         heart_static.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
         heart_dinamic.visibility = View.INVISIBLE
         linearLayout_squares.visibility = View.INVISIBLE
-        play_again.visibility = View.VISIBLE
         lista_cu_butoane.clear() // clear old elements from array
         lista_cu_red_buttons.clear() // clear old elements from array
         lista_cu_butoane_valide_apasate.clear() // clear old elements from buttons pressed
@@ -130,30 +140,40 @@ class MainActivity : AppCompatActivity() {
                     //text = contor_id.toString()
 
                 }
+                // if you don't have hints.
+                if(game.hints == 0){
+                    button_middle.isEnabled = false
+                }
+                // if you push hint button.
+                button_middle.setOnClickListener { Hint() }
+
+                // if you push a table button.
                 button.setOnClickListener { buttonClicked(button) } // when i click button
                 lista_cu_butoane.add(button) // adaugare button in lista
                 row.addView(button)
+                row.gravity = Gravity.CENTER
                 contor_id++
             }
 
             tableLayout.addView(row)
+            tableLayout.gravity = Gravity.CENTER
         }
         linearLayout_squares.addView(tableLayout)
-
-        //printf list
-        /*for (element in list){
-            println(element.text)
-        }*/
     }
 
+    fun Hint(){
+        game.hints--
+        if(game.hints == 0){
+            button_middle.isEnabled = false
+        }
+
+
+
+        button_middle.text = "Hint(${game.hints})"
+    }
 
     var lista_cu_butoane_valide_apasate: ArrayList<Int> = ArrayList() // salvare butoane rosii in aceasta lista;
     private fun buttonClicked(button: Button) {
-        //TODO: Bug la afisare, cred ca este de la createTable si afisarea sa
-
-        /*game.heart_down()
-        game.heart_down() // Merge
-        game.heart_down()*/
 
         var a_fost_apasat_corect = false
         for (i in  lista_cu_red_buttons){
@@ -170,11 +190,20 @@ class MainActivity : AppCompatActivity() {
             lista_cu_butoane_valide_apasate.add(button.id)
         }else{
             button.apply {
-                text = "||||||||"
+                if (game.level > 5)
+                    text = "||||"
+                else{
+                    text = "||||||||"
+                }
                 setTextColor(Color.RED)
                 isEnabled = false
             }
             game.heart_down()
+        }
+
+        if (game.stage == 4){
+            game.level_up()
+            game.stage = 2
         }
         println("Total elemente apasate: ")
         println(lista_cu_butoane_valide_apasate)
@@ -186,12 +215,10 @@ class MainActivity : AppCompatActivity() {
             lista_cu_butoane_valide_apasate.clear() // clear old elements from buttons pressed
             lista_cu_butoane.clear() // clear old elements from array
             lista_cu_red_buttons.clear() // clear old elements from array
-            game.level_up()
+            game.stage++
             new_game()
         }
         game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
-
-        println("button ${button.id}")
 
         // Verific daca mai are vieti sau a terminat jocul.
         if (game.heart <= 0 || game.level + ROWS > 9) { // level 8 este maxim (8 + 2(rows) = 10;
@@ -201,7 +228,9 @@ class MainActivity : AppCompatActivity() {
             game.level = 1
             game.heart = 3
             game.score = 0
-            play_again.setOnClickListener { new_game() } // When player press "Play again"
+            game.hints = 3
+            button_middle.isEnabled = true
+            button_middle.setOnClickListener { new_game() } // When player press "Play again"
         }
     }
 }
@@ -213,6 +242,7 @@ class game_squares{
     var score: Int = 0    // Init score with default: 0;
     var heart: Int = 3     // Init heart with default: 3;
     var stage: Int = 2;  // Init stage defauld 2; it is how much random numbers i make;
+    var hints: Int = 3;
 
     fun level_up() : Int {    // level-ul function;
         return level++
