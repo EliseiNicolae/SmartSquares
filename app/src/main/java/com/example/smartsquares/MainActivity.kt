@@ -167,7 +167,39 @@ class MainActivity : AppCompatActivity() {
             button_middle.isEnabled = false
         }
 
+        for (button in lista_cu_butoane){
+            for (i in (lista_cu_red_buttons - lista_cu_butoane_valide_apasate)) {
+                if(i == button.id) {
+                    button.apply {
+                        isEnabled = false
+                    }
+                    button_middle.isEnabled = false
+                    if (button.id == i) {
+                        println(button.id)
+                        button.apply {
+                            if (game.level > 5)
+                                text = "||||"
+                            else {
+                                text = "||||||||"
+                            }
+                            setTextColor(Color.BLACK)
+                        }
+                    }
+                    Handler().postDelayed({
+                        // disable all buttons
+                        button.apply {
+                            setTextColor(Color.TRANSPARENT)
+                            isEnabled = true
+                        }
+                        //if you have hints
+                        if (game.hints > 0)
+                            button_middle.isEnabled = true
+                    }, 1500)
+                }
+            }
+        }
 
+        //println(lista_cu_red_buttons - lista_cu_butoane_valide_apasate )
 
         button_middle.text = "Hint(${game.hints})"
     }
@@ -179,8 +211,10 @@ class MainActivity : AppCompatActivity() {
         for (i in  lista_cu_red_buttons){
             if(button.id == i){
                 a_fost_apasat_corect = true
+                break
             }
         }
+
         if (a_fost_apasat_corect){
             button.apply {
                 setTextColor(Color.GREEN)
@@ -205,11 +239,6 @@ class MainActivity : AppCompatActivity() {
             game.level_up()
             game.stage = 2
         }
-        println("Total elemente apasate: ")
-        println(lista_cu_butoane_valide_apasate)
-
-        println("Total elemente red buttons: ")
-        println(lista_cu_red_buttons)
 
         if(lista_cu_butoane_valide_apasate.count() == lista_cu_red_buttons.count()){
             lista_cu_butoane_valide_apasate.clear() // clear old elements from buttons pressed
