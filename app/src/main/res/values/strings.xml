@@ -7,4 +7,8 @@
     <string name="heart_static">"Heart: "</string>
     <string name="heart_dinamic">0</string>
     <string name="button_middle">Play Again</string>
+    <string name="skip">Skip</string>
+    <string name="instructiuni">Instructiuni</string>
+    <string name="copyright_instr">Copyright www.elisei.cf  @2020</string>
+    <string name="instructions_about">Acesta este about</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.smartsquares
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -35,6 +36,12 @@ class MainActivity : AppCompatActivity() {
         score_dinamic = findViewById(R.id.score_dinamic) // score dinamic;
         heart_dinamic = findViewById(R.id.heart_dinamic) // heart dinamic;
         new_game()
+        val main_instructtion = findViewById<Button>(R.id.main_instructtion)
+        main_instructtion.setOnClickListener {
+            val intent = Intent(this, Instructions::class.java)
+            startActivity(intent)
+        }
+
     }
     var lista_cu_butoane: ArrayList<Button> = ArrayList() // initializare lista cu butoane;
     var lista_cu_red_buttons: ArrayList<Int> = ArrayList() // salvare butoane rosii in aceasta lista;
