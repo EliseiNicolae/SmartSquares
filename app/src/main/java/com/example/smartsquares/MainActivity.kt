@@ -69,10 +69,12 @@ class MainActivity : AppCompatActivity() {
                 if (button.id == i){
                     println(button.id)
                     button.apply {
-                        if (game.level > 5)
+                        if (game.level > 6)
                             text = "|||"
-                        else{
-                            text = "|||||||"
+                        else if(game.level > 4){
+                            text = "|||||"
+                        }else{
+                            text = "||||||"
                         }
                         setTextColor(Color.BLACK)
                     }
@@ -185,10 +187,12 @@ class MainActivity : AppCompatActivity() {
                     if (button.id == i) {
                         println(button.id)
                         button.apply {
-                            if (game.level > 5)
+                            if (game.level > 6)
                                 text = "|||"
-                            else {
-                                text = "|||||||"
+                            else if(game.level > 4){
+                                text = "|||||"
+                            }else{
+                                text = "||||||"
                             }
                             setTextColor(Color.BLACK)
                         }
@@ -232,9 +236,11 @@ class MainActivity : AppCompatActivity() {
             lista_cu_butoane_valide_apasate.add(button.id)
         }else{
             button.apply {
-                if (game.level > 5)
+                if (game.level > 6)
                     text = "|||"
-                else{
+                else if(game.level > 4){
+                    text = "|||||"
+                }else{
                     text = "||||||"
                 }
                 setTextColor(Color.RED)
@@ -278,8 +284,8 @@ class game_squares{
     var level: Int = 1     // Init level with default: 1;
     var score: Int = 0    // Init score with default: 0;
     var heart: Int = 3     // Init heart with default: 3;
-    var stage: Int = 2;  // Init stage default 2; it is how much random numbers i make;
-    var hints: Int = 3;
+    var stage: Int = 2  // Init stage default 2; it is how much random numbers i make;
+    var hints: Int = 3
 
     fun level_up() : Int {    // level-ul function;
         return level++
