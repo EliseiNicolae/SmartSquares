@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Size
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -69,9 +70,9 @@ class MainActivity : AppCompatActivity() {
                     println(button.id)
                     button.apply {
                         if (game.level > 5)
-                            text = "||||"
+                            text = "|||"
                         else{
-                            text = "||||||||"
+                            text = "|||||||"
                         }
                         setTextColor(Color.BLACK)
                     }
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         button_middle.text = "Play Again!"
         heart_static.text = "Game Over"
         heart_static.setTextColor(Color.parseColor("#eb4034"));
-        heart_static.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50F)
+        heart_static.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
         heart_static.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
         heart_dinamic.visibility = View.INVISIBLE
         linearLayout_squares.visibility = View.INVISIBLE
@@ -185,9 +186,9 @@ class MainActivity : AppCompatActivity() {
                         println(button.id)
                         button.apply {
                             if (game.level > 5)
-                                text = "||||"
+                                text = "|||"
                             else {
-                                text = "||||||||"
+                                text = "|||||||"
                             }
                             setTextColor(Color.BLACK)
                         }
@@ -232,9 +233,9 @@ class MainActivity : AppCompatActivity() {
         }else{
             button.apply {
                 if (game.level > 5)
-                    text = "||||"
+                    text = "|||"
                 else{
-                    text = "||||||||"
+                    text = "||||||"
                 }
                 setTextColor(Color.RED)
                 isEnabled = false
@@ -257,7 +258,7 @@ class MainActivity : AppCompatActivity() {
         game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
 
         // Verific daca mai are vieti sau a terminat jocul.
-        if (game.heart <= 0 || game.level + ROWS > 9) { // level 8 este maxim (8 + 2(rows) = 10;
+        if (game.heart <= 0 || game.level + ROWS > 8) { // level 8 este maxim (8 + 2(rows) = 10;
             game_over()   // Set background for game_over
             ROWS = 2
             COLUMNS = 2
@@ -274,10 +275,10 @@ class MainActivity : AppCompatActivity() {
 
 
 class game_squares{
-    var level: Int = 1     // Init level with default: 0;
+    var level: Int = 1     // Init level with default: 1;
     var score: Int = 0    // Init score with default: 0;
     var heart: Int = 3     // Init heart with default: 3;
-    var stage: Int = 2;  // Init stage defauld 2; it is how much random numbers i make;
+    var stage: Int = 2;  // Init stage default 2; it is how much random numbers i make;
     var hints: Int = 3;
 
     fun level_up() : Int {    // level-ul function;

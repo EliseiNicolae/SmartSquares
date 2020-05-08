@@ -4,7 +4,7 @@
     <string name="level_dinamic">2</string>
     <string name="score_static">Score: </string>
     <string name="score_dinamic">0</string>
-    <string name="heart_static">"Heart: "</string>
+    <string name="heart_static">"Heart:"</string>
     <string name="heart_dinamic">0</string>
     <string name="button_middle">Play Again</string>
     <string name="skip">Skip</string>
