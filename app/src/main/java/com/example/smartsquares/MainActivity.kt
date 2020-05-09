@@ -264,7 +264,7 @@ class MainActivity : AppCompatActivity() {
         game.print_level_and_score(level_dinamic, score_dinamic, heart_dinamic)
 
         // Verific daca mai are vieti sau a terminat jocul.
-        if (game.heart <= 0 || game.level + ROWS > 8) { // level 8 este maxim (8 + 2(rows) = 10;
+        if (game.heart <= 0 || game.level + ROWS > 8) { // Maxim level: 7.
             game_over()   // Set background for game_over
             ROWS = 2
             COLUMNS = 2
